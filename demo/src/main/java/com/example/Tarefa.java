@@ -1,15 +1,17 @@
-
 package com.example;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Tarefa implements Serializable {
     private String titulo;
     private String descricao;
-    private String data;
-    private String horario;
+    private LocalDate data;
+    private LocalTime horario;
     private boolean concluida;
 
-    public Tarefa(String titulo, String descricao, String data, String horario) {
+    public Tarefa(String titulo, String descricao, LocalDate data, LocalTime horario) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.data = data;
@@ -27,7 +29,9 @@ public class Tarefa implements Serializable {
 
     @Override
     public String toString() {
-        return (concluida ? "[X] " : "[ ] ") + titulo + " - " + data + " " + horario +
+        DateTimeFormatter dataFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter horaFormat = DateTimeFormatter.ofPattern("HH:mm");
+        return (concluida ? "[X] " : "[ ] ") + titulo + " - " + data.format(dataFormat) + " " + horario.format(horaFormat) +
                "\nDescrição: " + descricao;
     }
 }
