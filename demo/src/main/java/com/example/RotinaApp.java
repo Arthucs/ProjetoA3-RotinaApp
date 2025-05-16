@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class RotinaApp {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        GerenciaRotina manager = new GerenciaRotina();
+        GerenciaRotina manager = new GerenciaRotina("rotina.txt");
 
         while (true) {
             System.out.println("\n--- MENU ---");

@@ -1,15 +1,16 @@
-
 package com.example;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GerenciaRotina{
+public class GerenciaRotina {
     private List<Tarefa> tarefas;
-    private static final String ARQUIVO = "rotina.txt";
+    private final String arquivo;
 
-    public GerenciaRotina() {
-        tarefas = carregarTarefas();
+    public GerenciaRotina(String arquivo) {
+        this.arquivo = arquivo;
+        this.tarefas = carregarTarefas();
     }
 
     public void adicionarTarefa(Tarefa tarefa) {
@@ -37,18 +38,23 @@ public class GerenciaRotina{
     }
 
     private void salvarTarefas() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ARQUIVO))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(arquivo))) {
             out.writeObject(tarefas);
         } catch (IOException e) {
             System.out.println("Erro ao salvar tarefas: " + e.getMessage());
         }
     }
 
+    @SuppressWarnings("unchecked")
     private List<Tarefa> carregarTarefas() {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(ARQUIVO))) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(arquivo))) {
             return (List<Tarefa>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             return new ArrayList<>();
         }
+    }
+
+    public List<Tarefa> getTarefas() {
+        return tarefas;
     }
 }
