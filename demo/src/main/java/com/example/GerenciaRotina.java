@@ -1,8 +1,13 @@
 package com.example;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class GerenciaRotina {
     private List<Tarefa> tarefas;
@@ -16,6 +21,47 @@ public class GerenciaRotina {
     public void adicionarTarefa(Tarefa tarefa) {
         tarefas.add(tarefa);
         salvarTarefas();
+    }
+
+    public void construirTarefa(Scanner scanner) {
+        System.out.print("Título: ");
+        String titulo = scanner.nextLine();
+
+        System.out.print("Descrição: ");
+        String descricao = scanner.nextLine();
+
+        LocalDate data = null;
+        while (data == null) {
+            System.out.print("Data (dd/mm/aaaa): ");
+            String dataString = scanner.nextLine();
+            try {
+                data = LocalDate.parse(dataString, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                if (data.isBefore(LocalDate.now())) {
+                    System.out.println("A data não pode ser no passado. Tente novamente.");
+                    data = null;
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("Data Inválida! Tente novamente.");
+            }
+        }
+
+        LocalTime horario = null;
+        while (horario == null) {
+            System.out.print("Horario (HH:mm): ");
+            String horaString = scanner.nextLine();
+            try {
+                horario = LocalTime.parse(horaString, DateTimeFormatter.ofPattern("HH:mm"));
+                if (data.isEqual(LocalDate.now()) && horario.isBefore(LocalTime.now())) {
+                    System.out.println("Horário não pode ser no passado para a data de hoje. Tente novamente.");
+                    horario = null;
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("Horário Inválido! Tente novamente.");
+            }
+        }
+
+        Tarefa novaTarefa = new Tarefa(titulo, descricao, data, horario);
+        adicionarTarefa(novaTarefa);
     }
 
     public void listarTarefas() {
