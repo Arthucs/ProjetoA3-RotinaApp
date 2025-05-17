@@ -27,6 +27,22 @@ public class Tarefa implements Serializable {
         return concluida;
     }
 
+        public String getTitulo() {
+        return titulo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public LocalDate getData() {
+        return data;
+    }
+
+    public LocalTime getHorario() {
+        return horario;
+    }
+
     @Override
     public String toString() {
         DateTimeFormatter dataFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
