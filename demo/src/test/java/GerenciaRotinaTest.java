@@ -249,4 +249,48 @@ public class GerenciaRotinaTest {
 
         assertFalse(gerenciaRotina.getTarefas().get(0).isConcluida());
     }
+
+    @Test
+    public void deveRepetirEntradaAposDataNoPassado() {
+        LocalDate dataPassada = LocalDate.now().minusDays(1);
+        LocalDate dataValida = LocalDate.now().plusDays(1);
+
+        String entrada = String.join("\n",
+                "Tarefa com data passada",                          
+                "Descrição",                                        
+                dataPassada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),   
+                dataValida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),    
+                "10:00" 
+        );
+
+        Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes()));
+        gerenciaRotina.construirTarefa(scanner);
+
+        assertEquals(1, gerenciaRotina.getTarefas().size());
+        assertEquals("Tarefa com data passada", gerenciaRotina.getTarefas().get(0).getTitulo());
+    }
+
+    @Test
+    public void deveRepetirEntradaAposHorarioNoPassadoParaHoje() {
+        LocalDate hoje = LocalDate.now();
+        String dataHoje = hoje.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+        // Horário no passado (1 hora atrás)
+        LocalTime horarioPassado = LocalTime.now().minusHours(1);
+        LocalTime horarioValido = LocalTime.now().plusHours(1);
+
+        String entrada = String.join("\n",
+                "Tarefa com hora passada",
+                "Descrição",                                    
+                dataHoje,                                       
+                horarioPassado.format(DateTimeFormatter.ofPattern("HH:mm")),  
+                horarioValido.format(DateTimeFormatter.ofPattern("HH:mm"))    
+        );
+
+        Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes()));
+        gerenciaRotina.construirTarefa(scanner);
+
+        assertEquals(1, gerenciaRotina.getTarefas().size());
+        assertEquals("Tarefa com hora passada", gerenciaRotina.getTarefas().get(0).getTitulo());
+    }
 }
