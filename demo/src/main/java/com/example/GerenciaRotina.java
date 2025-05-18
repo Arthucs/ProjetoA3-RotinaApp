@@ -18,50 +18,63 @@ public class GerenciaRotina {
         this.tarefas = carregarTarefas();
     }
 
+    private String lerEntrada(Scanner scanner, String prompt) {
+    System.out.print(prompt);
+    String entrada = scanner.nextLine();
+    if (entrada.equalsIgnoreCase("<")) {
+        throw new CancelarOperacaoException();
+    }
+    return entrada;
+    }
+
+
     public void adicionarTarefa(Tarefa tarefa) {
         tarefas.add(tarefa);
         salvarTarefas();
     }
 
     public void construirTarefa(Scanner scanner) {
-        System.out.print("Título: ");
-        String titulo = scanner.nextLine();
+        System.out.println("Digite '<' a qualquer momento para voltar ao menu.");
 
-        System.out.print("Descrição: ");
-        String descricao = scanner.nextLine();
+        try {
+            String titulo = lerEntrada(scanner, "Título: ");
+            String descricao = lerEntrada(scanner, "Descrição: ");
 
-        LocalDate data = null;
-        while (data == null) {
-            System.out.print("Data (dd/mm/aaaa): ");
-            String dataString = scanner.nextLine();
-            try {
-                data = LocalDate.parse(dataString, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                if (data.isBefore(LocalDate.now())) {
-                    System.out.println("A data não pode ser no passado. Tente novamente.");
-                    data = null;
+            LocalDate data = null;
+            while (data == null) {
+                String dataStr = lerEntrada(scanner, "Data (dd/MM/yyyy): ");
+                try {
+                    data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    if (data.isBefore(LocalDate.now())) {
+                        System.out.println("A data não pode ser no passado. Tente novamente.");
+                        data = null;
+                    }
+                } catch (DateTimeParseException e) {
+                    System.out.println("Data inválida! Tente novamente.");
                 }
-            } catch (DateTimeParseException e) {
-                System.out.println("Data Inválida! Tente novamente.");
             }
-        }
 
-        LocalTime horario = null;
-        while (horario == null) {
-            System.out.print("Horario (HH:mm): ");
-            String horaString = scanner.nextLine();
-            try {
-                horario = LocalTime.parse(horaString, DateTimeFormatter.ofPattern("HH:mm"));
-                if (data.isEqual(LocalDate.now()) && horario.isBefore(LocalTime.now())) {
-                    System.out.println("Horário não pode ser no passado para a data de hoje. Tente novamente.");
-                    horario = null;
+            LocalTime horario = null;
+            while (horario == null) {
+                String horaStr = lerEntrada(scanner, "Horário (HH:mm): ");
+                try {
+                    horario = LocalTime.parse(horaStr, DateTimeFormatter.ofPattern("HH:mm"));
+                    if (data.isEqual(LocalDate.now()) && horario.isBefore(LocalTime.now())) {
+                        System.out.println("Horário não pode ser no passado para hoje. Tente novamente.");
+                        horario = null;
+                    }
+                } catch (DateTimeParseException e) {
+                System.out.println("Horário inválido! Tente novamente.");
                 }
-            } catch (DateTimeParseException e) {
-                System.out.println("Horário Inválido! Tente novamente.");
             }
-        }
 
-        Tarefa novaTarefa = new Tarefa(titulo, descricao, data, horario);
-        adicionarTarefa(novaTarefa);
+            Tarefa novaTarefa = new Tarefa(titulo, descricao, data, horario);
+            adicionarTarefa(novaTarefa);
+            System.out.println("Tarefa adicionada com sucesso.");
+
+        } catch (CancelarOperacaoException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void listarTarefas() {
