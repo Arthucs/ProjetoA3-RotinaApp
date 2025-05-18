@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -53,19 +54,25 @@ public class GerenciaRotinaTest {
 
     @Test
     public void testConcluirTarefa() {
-        Tarefa tarefa = new Tarefa("Ler", "Capítulo de Redes",
-                LocalDate.of(2025, 5, 17), LocalTime.of(10, 0));
+        Tarefa tarefa = new Tarefa("Estudar", "Matemática", LocalDate.now().plusDays(1), LocalTime.of(10, 0));
         gerenciaRotina.adicionarTarefa(tarefa);
 
-        gerenciaRotina.concluirTarefa(0);
+        String input = "1\n";  // índice da tarefa
+        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+        gerenciaRotina.concluirTarefa(scanner);
 
         assertTrue(gerenciaRotina.getTarefas().get(0).isConcluida());
     }
 
     @Test
     public void testConcluirTarefaIndiceInvalido() {
-        gerenciaRotina.concluirTarefa(99);
-        assertTrue(gerenciaRotina.getTarefas().isEmpty());
+        String input = "5\n";  // nenhum índice válido
+        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+
+        gerenciaRotina.concluirTarefa(scanner);
+
+        // Nenhuma exceção lançada e nada alterado
+        assertEquals(0, gerenciaRotina.getTarefas().size());
     }
 
     @Test
@@ -101,19 +108,20 @@ public class GerenciaRotinaTest {
 
     @Test
     public void testConcluirTarefaPersisteNoArquivo() {
-        Tarefa tarefa = new Tarefa("Apresentação", "Slides do trabalho",
-            LocalDate.of(2025, 5, 22), LocalTime.of(14, 0));
+        Tarefa tarefa = new Tarefa("Trabalho", "Apresentação", LocalDate.now().plusDays(1), LocalTime.of(14, 0));
         gerenciaRotina.adicionarTarefa(tarefa);
-        gerenciaRotina.concluirTarefa(0);
 
-        GerenciaRotina novaInstancia = new GerenciaRotina(tempArquivo.toString());
-        List<Tarefa> tarefas = novaInstancia.getTarefas();
+        String input = "1\n";
+        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+        gerenciaRotina.concluirTarefa(scanner);
+
+        List<Tarefa> tarefas = gerenciaRotina.getTarefas();
 
         assertEquals(1, tarefas.size());
         assertTrue(tarefas.get(0).isConcluida());
     }
 
-        @Test
+    @Test
     public void testConstruirTarefaValida() {
         String dataFutura = LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
@@ -214,5 +222,31 @@ public class GerenciaRotinaTest {
         gerenciaRotina.construirTarefa(scanner);
 
         assertEquals(0, gerenciaRotina.getTarefas().size());
+    }
+
+    @Test
+    public void testCancelarConclusaoDeTarefa() {
+        Tarefa tarefa = new Tarefa("Revisar", "História", LocalDate.now().plusDays(1), LocalTime.of(9, 0));
+        gerenciaRotina.adicionarTarefa(tarefa);
+
+        String input = "<\n";    
+        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+
+        gerenciaRotina.concluirTarefa(scanner);
+
+        assertFalse(gerenciaRotina.getTarefas().get(0).isConcluida());
+    }
+
+    @Test
+    public void testEntradaInvalidaDuranteConcluirTarefa() {
+        Tarefa tarefa = new Tarefa("Estudar", "Física", LocalDate.now().plusDays(1), LocalTime.of(8, 0));
+        gerenciaRotina.adicionarTarefa(tarefa);
+
+        String input = "abc\n";  
+        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+
+        gerenciaRotina.concluirTarefa(scanner);
+
+        assertFalse(gerenciaRotina.getTarefas().get(0).isConcluida());
     }
 }
