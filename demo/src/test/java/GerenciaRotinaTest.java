@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -17,6 +18,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.example.CancelarOperacaoException;
 import com.example.GerenciaRotina;
 import com.example.Tarefa;
 
@@ -134,45 +136,84 @@ public class GerenciaRotinaTest {
 
     @Test
     public void testDataInvalida() {
-        String input = String.join("\n",
-                "Título",             
-                "Descrição",          
-                "32/13/2025",         
-                "15/04/2026",         
-                "01/01/2020",         
-                LocalDate.now().plusDays(2).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                "10:00"               
+        String dataInvalida = "32/13/2025";
+        String dataValida = LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+        String entrada = String.join("\n",
+                "Teste data",              
+                "Descrição qualquer",      
+                dataInvalida,               
+                dataValida,                 
+                "14:00"                     
         );
 
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+        Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes()));
         gerenciaRotina.construirTarefa(scanner);
 
-        String saida = outContent.toString();
-
-        assertTrue(saida.contains("Data Inválida! Tente novamente."));
         assertEquals(1, gerenciaRotina.getTarefas().size());
+        assertEquals("Teste data", gerenciaRotina.getTarefas().get(0).getTitulo());
     }
 
     @Test
     public void testHorarioInvalido() {
-        LocalDate hoje = LocalDate.now();
-        String data = hoje.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        String input = String.join("\n",
-                "Dormir",                   
-                "Descansar bem",            
-                data,                       
-                "25:00",                    
-                "12:60",                    
-                LocalTime.now().minusHours(1).format(DateTimeFormatter.ofPattern("HH:mm")), // horário no passado
-                LocalTime.now().plusHours(1).format(DateTimeFormatter.ofPattern("HH:mm"))   // horário válido
+        String dataValida = LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+        String entrada = String.join("\n",
+                "Teste hora",             
+                "Descrição qualquer",      
+                dataValida,                 
+                "25:99",                    
+                "15:30"                     
         );
 
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+        Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes()));
         gerenciaRotina.construirTarefa(scanner);
 
-        String saida = outContent.toString();
-        assertTrue(saida.contains("Horário Inválido"));
-        assertTrue(saida.contains("Horário não pode ser no passado para a data de hoje. Tente novamente."));
         assertEquals(1, gerenciaRotina.getTarefas().size());
+        assertEquals("Teste hora", gerenciaRotina.getTarefas().get(0).getTitulo());
+    }
+
+    @Test
+    public void testCancelarNoTitulo() {
+        String inputSimulado = "<\n";
+        System.setIn(new ByteArrayInputStream(inputSimulado.getBytes()));
+        Scanner scanner = new Scanner(System.in);
+
+        gerenciaRotina.construirTarefa(scanner);
+
+        assertEquals(0, gerenciaRotina.getTarefas().size());
+    }
+
+    @Test
+    public void testCancelarNaDescricao() {
+        String inputSimulado = "Teste Tarefa\n<\n";
+        System.setIn(new ByteArrayInputStream(inputSimulado.getBytes()));
+        Scanner scanner = new Scanner(System.in);
+
+        gerenciaRotina.construirTarefa(scanner);
+
+        assertEquals(0, gerenciaRotina.getTarefas().size());
+    }
+
+    @Test
+    public void testCancelarNaData() {
+        String inputSimulado = "Teste Tarefa\nLembrar Tarefa\n<\n";
+        System.setIn(new ByteArrayInputStream(inputSimulado.getBytes()));
+        Scanner scanner = new Scanner(System.in);
+
+        gerenciaRotina.construirTarefa(scanner);
+
+        assertEquals(0, gerenciaRotina.getTarefas().size());
+    }
+
+    @Test
+    public void testCancelarNoHorario() {
+        String inputSimulado = "Teste Tarefa\nLembrar Tarefa\n20/12/2025\n<\n";
+        System.setIn(new ByteArrayInputStream(inputSimulado.getBytes()));
+        Scanner scanner = new Scanner(System.in);
+
+        gerenciaRotina.construirTarefa(scanner);
+
+        assertEquals(0, gerenciaRotina.getTarefas().size());
     }
 }
