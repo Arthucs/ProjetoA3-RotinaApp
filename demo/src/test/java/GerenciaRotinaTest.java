@@ -18,7 +18,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.example.CancelarOperacaoException;
 import com.example.GerenciaRotina;
 import com.example.Tarefa;
 

@@ -29,10 +29,7 @@ public class RotinaController {
                     manager.listarTarefas();
                     break;
                 case 3:
-                    manager.listarTarefas();
-                    System.out.print("Número da tarefa para concluir: ");
-                    int index = Integer.parseInt(scanner.nextLine()) - 1;
-                    manager.concluirTarefa(index);
+                    manager.concluirTarefa(scanner);
                     break;
                 case 4:
                     System.out.println("Saindo...");

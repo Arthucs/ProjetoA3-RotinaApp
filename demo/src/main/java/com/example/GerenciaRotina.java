@@ -87,14 +87,40 @@ public class GerenciaRotina {
         }
     }
 
-    public void concluirTarefa(int indice) {
-        if (indice >= 0 && indice < tarefas.size()) {
-            tarefas.get(indice).marcarComoConcluida();
-            salvarTarefas();
-        } else {
+    public void concluirTarefa(Scanner scanner) {
+        try {
+            if (tarefas.isEmpty()) {
+                System.out.println("Nenhuma tarefa para concluir.");
+                return;
+            }
+
+            listarTarefas();
+            System.out.println("Digite '<' para cancelar.");
+
+            System.out.print("Informe o número da tarefa a concluir: ");
+            String entrada = scanner.nextLine();
+
+            if (entrada.equalsIgnoreCase("<")) {
+                throw new CancelarOperacaoException();
+            }
+
+            int indice = Integer.parseInt(entrada) - 1;
+
+            if (indice >= 0 && indice < tarefas.size()) {
+                tarefas.get(indice).marcarComoConcluida();
+                salvarTarefas();
+                System.out.println("Tarefa concluída com sucesso.");
+            } else {
             System.out.println("Índice inválido.");
+            }
+
+        } catch (CancelarOperacaoException e) {
+            System.out.println(e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Entrada inválida. Por favor, digite um número válido.");
         }
     }
+
 
     private void salvarTarefas() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(arquivo))) {
