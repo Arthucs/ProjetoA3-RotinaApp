@@ -11,6 +11,7 @@ public class RotinaController {
         this.manager = manager;
     }
 
+    
     public void executar() {
         while (true) {
             System.out.println("\n--- MENU ---");
