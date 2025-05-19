@@ -8,10 +8,16 @@ import com.example.RotinaInterfaceG;
 import com.example.Tarefa;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.*;
@@ -103,4 +109,55 @@ public class RotinaInterfaceGTest {
         }
     }
 
+    @Test
+    public void testInicializarJanelaComTituloEComponentes() {
+        RotinaInterfaceG janela = new RotinaInterfaceG(mockGerencia);
+        janela.pack();
+        janela.setVisible(true);
+        assertEquals("Menu Principal", janela.getTitle());
+
+        assertTrue(janela.getLayout() instanceof BorderLayout);
+
+        Component[] componentes = janela.getContentPane().getComponents();
+
+        boolean encontrouTitulo = false;
+
+        for (Component c : componentes) {
+            if (c instanceof JLabel) {
+                JLabel labelTitulo = (JLabel) c;
+                assertEquals("OrganizApp", labelTitulo.getText());
+                assertEquals(SwingConstants.CENTER, labelTitulo.getHorizontalAlignment());
+                encontrouTitulo = true;
+                break;
+            }
+        }
+
+        assertTrue(encontrouTitulo);
+    }
+
+    @Test
+    public void testCriarBotaoComTextoEAcao() {
+        RotinaInterfaceG janela = new RotinaInterfaceG(mockGerencia);
+
+        ActionListener listener = mock(ActionListener.class);
+        JButton botao = janelaTestPrivate_criarBotao(janela, "Clique aqui", listener);
+
+        assertEquals("Clique aqui", botao.getText());
+        assertEquals(new Dimension(200, 30), botao.getPreferredSize());
+        assertEquals("Arial", botao.getFont().getFontName());
+
+        botao.doClick();
+        verify(listener, times(1)).actionPerformed(any(ActionEvent.class));
+    }
+
+    private JButton janelaTestPrivate_criarBotao(RotinaInterfaceG janela, String texto, ActionListener acao) {
+        try {
+            java.lang.reflect.Method metodo = RotinaInterfaceG.class.getDeclaredMethod("criarBotao", String.class, ActionListener.class);
+            metodo.setAccessible(true);
+            return (JButton) metodo.invoke(janela, texto, acao);
+        } catch (Exception e) {
+            fail("Erro ao acessar método criarBotao: " + e.getMessage());
+            return null;
+        }
+    }
 }
