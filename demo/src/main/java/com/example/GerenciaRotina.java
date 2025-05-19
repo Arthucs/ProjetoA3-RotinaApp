@@ -79,13 +79,26 @@ public class GerenciaRotina {
     public void concluirTarefa(Scanner scanner, Component parentComponent) {
         try {
             String entrada = lerEntrada(scanner);
-
             int indice = Integer.parseInt(entrada) - 1;
 
             if (indice >= 0 && indice < tarefas.size()) {
-                tarefas.get(indice).marcarComoConcluida();
+                Tarefa tarefa = tarefas.get(indice);
+
+                if (tarefa.isConcluida()) {
+                    tarefa.desmarcarComoConcluida();
+                    JOptionPane.showMessageDialog(parentComponent,
+                            "Tarefa desmarcada com sucesso!",
+                            "Tarefa desmarcada!",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    tarefa.marcarComoConcluida();
+                    JOptionPane.showMessageDialog(parentComponent,
+                            "Tarefa concluída com sucesso!",
+                            "Tarefa concluída!",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
                 salvarTarefas();
-                JOptionPane.showMessageDialog(parentComponent, "Tarefa concluída com sucesso!", "Tarefa concluída!", JOptionPane.INFORMATION_MESSAGE);
+
             } else {
                 JOptionPane.showMessageDialog(parentComponent, "Índice inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
             }

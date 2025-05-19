@@ -121,7 +121,7 @@ public class RotinaInterfaceG extends JFrame {
             sb.append(i + 1).append(". ").append(gerencia.getTarefas().get(i)).append("\n");
         }
 
-        String escolha = JOptionPane.showInputDialog(this, sb + "\nDigite o número da tarefa a concluir:");
+        String escolha = JOptionPane.showInputDialog(this, sb + "\nDigite o número da tarefa que deseja concluir ou desmarcar:");
 
         if (escolha == null) return;
 
