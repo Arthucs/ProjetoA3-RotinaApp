@@ -1,5 +1,6 @@
 package com.example;
 
+import java.awt.Component;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -8,6 +9,8 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.swing.JOptionPane;
 
 public class GerenciaRotina {
     private List<Tarefa> tarefas;
@@ -18,8 +21,7 @@ public class GerenciaRotina {
         this.tarefas = carregarTarefas();
     }
 
-    private String lerEntrada(Scanner scanner, String prompt) {
-    System.out.print(prompt);
+    private String lerEntrada(Scanner scanner) {
     String entrada = scanner.nextLine();
     return entrada;
     }
@@ -29,89 +31,78 @@ public class GerenciaRotina {
         salvarTarefas();
     }
 
-    public void construirTarefa(Scanner scanner) {
+    public void construirTarefa(Scanner scanner, Component parentComponent) {
 
-   
-        String titulo = lerEntrada(scanner, "Título: ");
-        String descricao = lerEntrada(scanner, "Descrição: ");
+        String titulo = lerEntrada(scanner);
+        String descricao = lerEntrada(scanner);
 
         LocalDate data = null;
         while (data == null) {
-            String dataStr = lerEntrada(scanner, "Data (dd/MM/yyyy): ");
+            String dataStr = lerEntrada(scanner);
             try {
                 data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                 if (data.isBefore(LocalDate.now())) {
-                    System.out.println("A data não pode ser no passado. Tente novamente.");
+                    JOptionPane.showMessageDialog(parentComponent, "A data não pode ser no passado.", "Erro", JOptionPane.ERROR_MESSAGE);
                     data = null;
                 }
             } catch (DateTimeParseException e) {
-                System.out.println("Data inválida! Tente novamente.");
+                JOptionPane.showMessageDialog(parentComponent, "Data inválida! Tente novamente.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
 
         LocalTime horario = null;
         while (horario == null) {
-            String horaStr = lerEntrada(scanner, "Horário (HH:mm): ");
+            String horaStr = lerEntrada(scanner);
             try {
                 horario = LocalTime.parse(horaStr, DateTimeFormatter.ofPattern("HH:mm"));
                 if (data.isEqual(LocalDate.now()) && horario.isBefore(LocalTime.now())) {
-                    System.out.println("Horário não pode ser no passado para hoje. Tente novamente.");
+                    JOptionPane.showMessageDialog(parentComponent, "Horário não pode ser no passado para hoje. Tente novamente.", "Erro", JOptionPane.ERROR_MESSAGE);
                     horario = null;
                 }
             } catch (DateTimeParseException e) {
-            System.out.println("Horário inválido! Tente novamente.");
+                JOptionPane.showMessageDialog(parentComponent, "Horário inválido! Tente novamente.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
 
         Tarefa novaTarefa = new Tarefa(titulo, descricao, data, horario);
         adicionarTarefa(novaTarefa);
-        System.out.println("Tarefa adicionada com sucesso.");
+        JOptionPane.showMessageDialog(parentComponent, "Tarefa adicionada com sucesso!", "Tarefa adicionada!", JOptionPane.INFORMATION_MESSAGE);
 
     }
 
     public void listarTarefas() {
-        if (tarefas.isEmpty()) {
-            System.out.println("Nenhuma tarefa encontrada.");
-            return;
-        }
         for (int i = 0; i < tarefas.size(); i++) {
             System.out.println(i + 1 + ". " + tarefas.get(i));
         }
     }
 
-    public void concluirTarefa(Scanner scanner) {
+    public void concluirTarefa(Scanner scanner, Component parentComponent) {
         try {
-            if (tarefas.isEmpty()) {
-                System.out.println("Nenhuma tarefa para concluir.");
-                return;
-            }
 
             listarTarefas();
 
-            System.out.print("Informe o número da tarefa a concluir: ");
-            String entrada = scanner.nextLine();
+            String entrada = lerEntrada(scanner);
 
             int indice = Integer.parseInt(entrada) - 1;
 
             if (indice >= 0 && indice < tarefas.size()) {
                 tarefas.get(indice).marcarComoConcluida();
                 salvarTarefas();
-                System.out.println("Tarefa concluída com sucesso.");
+                JOptionPane.showMessageDialog(parentComponent, "Tarefa concluída com sucesso!", "Tarefa concluída!", JOptionPane.INFORMATION_MESSAGE);
             } else {
-            System.out.println("Índice inválido.");
+                JOptionPane.showMessageDialog(parentComponent, "Índice inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (NumberFormatException e) {
-            System.out.println("Entrada inválida. Por favor, digite um número válido.");
+             JOptionPane.showMessageDialog(parentComponent, "Entrada inválida. Por favor, digite um número válido.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-
 
     private void salvarTarefas() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(arquivo))) {
             out.writeObject(tarefas);
         } catch (IOException e) {
-            System.out.println("Erro ao salvar tarefas: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao salvar tarefas: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 

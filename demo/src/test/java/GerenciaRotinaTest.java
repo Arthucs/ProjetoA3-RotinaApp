@@ -58,7 +58,7 @@ public class GerenciaRotinaTest {
 
         String input = "1\n";  // índice da tarefa
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        gerenciaRotina.concluirTarefa(scanner);
+        gerenciaRotina.concluirTarefa(scanner, null);
 
         assertTrue(gerenciaRotina.getTarefas().get(0).isConcluida());
     }
@@ -68,7 +68,7 @@ public class GerenciaRotinaTest {
         String input = "5\n";  // nenhum índice válido
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
-        gerenciaRotina.concluirTarefa(scanner);
+        gerenciaRotina.concluirTarefa(scanner, null);
 
         // Nenhuma exceção lançada e nada alterado
         assertEquals(0, gerenciaRotina.getTarefas().size());
@@ -112,7 +112,7 @@ public class GerenciaRotinaTest {
 
         String input = "1\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        gerenciaRotina.concluirTarefa(scanner);
+        gerenciaRotina.concluirTarefa(scanner, null);
 
         List<Tarefa> tarefas = gerenciaRotina.getTarefas();
 
@@ -132,7 +132,7 @@ public class GerenciaRotinaTest {
         );
 
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        gerenciaRotina.construirTarefa(scanner);
+        gerenciaRotina.construirTarefa(scanner, null);
 
         assertEquals(1, gerenciaRotina.getTarefas().size());
         Tarefa tarefa = gerenciaRotina.getTarefas().get(0);
@@ -154,7 +154,7 @@ public class GerenciaRotinaTest {
         );
 
         Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes()));
-        gerenciaRotina.construirTarefa(scanner);
+        gerenciaRotina.construirTarefa(scanner, null);
 
         assertEquals(1, gerenciaRotina.getTarefas().size());
         assertEquals("Teste data", gerenciaRotina.getTarefas().get(0).getTitulo());
@@ -173,7 +173,7 @@ public class GerenciaRotinaTest {
         );
 
         Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes()));
-        gerenciaRotina.construirTarefa(scanner);
+        gerenciaRotina.construirTarefa(scanner, null);
 
         assertEquals(1, gerenciaRotina.getTarefas().size());
         assertEquals("Teste hora", gerenciaRotina.getTarefas().get(0).getTitulo());
@@ -187,7 +187,7 @@ public class GerenciaRotinaTest {
         String input = "abc\n";  
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
-        gerenciaRotina.concluirTarefa(scanner);
+        gerenciaRotina.concluirTarefa(scanner, null);
 
         assertFalse(gerenciaRotina.getTarefas().get(0).isConcluida());
     }
@@ -206,7 +206,7 @@ public class GerenciaRotinaTest {
         );
 
         Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes()));
-        gerenciaRotina.construirTarefa(scanner);
+        gerenciaRotina.construirTarefa(scanner, null);
 
         assertEquals(1, gerenciaRotina.getTarefas().size());
         assertEquals("Tarefa com data passada", gerenciaRotina.getTarefas().get(0).getTitulo());
@@ -230,7 +230,7 @@ public class GerenciaRotinaTest {
         );
 
         Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes()));
-        gerenciaRotina.construirTarefa(scanner);
+        gerenciaRotina.construirTarefa(scanner, null);
 
         assertEquals(1, gerenciaRotina.getTarefas().size());
         assertEquals("Tarefa com hora passada", gerenciaRotina.getTarefas().get(0).getTitulo());

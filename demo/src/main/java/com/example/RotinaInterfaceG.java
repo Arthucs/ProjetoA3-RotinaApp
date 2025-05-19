@@ -56,7 +56,8 @@ public class RotinaInterfaceG extends JFrame {
                     hora.getText();
 
             Scanner scanner = new Scanner(entrada);
-            gerencia.construirTarefa(scanner);
+            gerencia.construirTarefa(scanner, null);
+
         }
     }
 
@@ -89,7 +90,7 @@ public class RotinaInterfaceG extends JFrame {
         if (escolha == null) return;
 
         Scanner scanner = new Scanner(escolha);
-        gerencia.concluirTarefa(scanner);
+        gerencia.concluirTarefa(scanner, null);
     }
 
 }
