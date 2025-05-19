@@ -27,7 +27,6 @@ public class GerenciaRotina {
     return entrada;
     }
 
-
     public void adicionarTarefa(Tarefa tarefa) {
         tarefas.add(tarefa);
         salvarTarefas();
