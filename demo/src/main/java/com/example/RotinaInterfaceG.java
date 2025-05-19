@@ -61,7 +61,7 @@ public class RotinaInterfaceG extends JFrame {
         }
     }
 
-    private void listarTarefas() {
+    public void listarTarefas() {
         StringBuilder sb = new StringBuilder();
         int i = 1;
         for (Tarefa tarefa : gerencia.getTarefas()) {
@@ -74,7 +74,7 @@ public class RotinaInterfaceG extends JFrame {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void concluirTarefa() {
+    public void concluirTarefa() {
         if (gerencia.getTarefas().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Nenhuma tarefa disponível.");
             return;

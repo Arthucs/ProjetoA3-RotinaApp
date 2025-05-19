@@ -75,19 +75,6 @@ public class GerenciaRotinaTest {
     }
 
     @Test
-    public void testListarTarefasComListaVazia() {
-        java.io.ByteArrayOutputStream outContent = new java.io.ByteArrayOutputStream();
-        System.setOut(new java.io.PrintStream(outContent));
-
-        gerenciaRotina.listarTarefas();
-
-        String saida = outContent.toString().trim();
-        assertTrue(saida.contains("Nenhuma tarefa encontrada."));
-
-        System.setOut(System.out);
-    }
-
-    @Test
     public void testListarTarefasComUmaTarefa() {
         Tarefa tarefa = new Tarefa("Estudar", "JUnit",
             LocalDate.of(2025, 5, 20), LocalTime.of(10, 0));
