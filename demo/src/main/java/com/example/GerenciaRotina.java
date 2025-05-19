@@ -21,9 +21,6 @@ public class GerenciaRotina {
     private String lerEntrada(Scanner scanner, String prompt) {
     System.out.print(prompt);
     String entrada = scanner.nextLine();
-    if (entrada.equalsIgnoreCase("<")) {
-        throw new CancelarOperacaoException();
-    }
     return entrada;
     }
 
@@ -33,47 +30,43 @@ public class GerenciaRotina {
     }
 
     public void construirTarefa(Scanner scanner) {
-        System.out.println("Digite '<' a qualquer momento para voltar ao menu.");
 
-        try {
-            String titulo = lerEntrada(scanner, "Título: ");
-            String descricao = lerEntrada(scanner, "Descrição: ");
+   
+        String titulo = lerEntrada(scanner, "Título: ");
+        String descricao = lerEntrada(scanner, "Descrição: ");
 
-            LocalDate data = null;
-            while (data == null) {
-                String dataStr = lerEntrada(scanner, "Data (dd/MM/yyyy): ");
-                try {
-                    data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                    if (data.isBefore(LocalDate.now())) {
-                        System.out.println("A data não pode ser no passado. Tente novamente.");
-                        data = null;
-                    }
-                } catch (DateTimeParseException e) {
-                    System.out.println("Data inválida! Tente novamente.");
+        LocalDate data = null;
+        while (data == null) {
+            String dataStr = lerEntrada(scanner, "Data (dd/MM/yyyy): ");
+            try {
+                data = LocalDate.parse(dataStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                if (data.isBefore(LocalDate.now())) {
+                    System.out.println("A data não pode ser no passado. Tente novamente.");
+                    data = null;
                 }
+            } catch (DateTimeParseException e) {
+                System.out.println("Data inválida! Tente novamente.");
             }
-
-            LocalTime horario = null;
-            while (horario == null) {
-                String horaStr = lerEntrada(scanner, "Horário (HH:mm): ");
-                try {
-                    horario = LocalTime.parse(horaStr, DateTimeFormatter.ofPattern("HH:mm"));
-                    if (data.isEqual(LocalDate.now()) && horario.isBefore(LocalTime.now())) {
-                        System.out.println("Horário não pode ser no passado para hoje. Tente novamente.");
-                        horario = null;
-                    }
-                } catch (DateTimeParseException e) {
-                System.out.println("Horário inválido! Tente novamente.");
-                }
-            }
-
-            Tarefa novaTarefa = new Tarefa(titulo, descricao, data, horario);
-            adicionarTarefa(novaTarefa);
-            System.out.println("Tarefa adicionada com sucesso.");
-
-        } catch (CancelarOperacaoException e) {
-            System.out.println(e.getMessage());
         }
+
+        LocalTime horario = null;
+        while (horario == null) {
+            String horaStr = lerEntrada(scanner, "Horário (HH:mm): ");
+            try {
+                horario = LocalTime.parse(horaStr, DateTimeFormatter.ofPattern("HH:mm"));
+                if (data.isEqual(LocalDate.now()) && horario.isBefore(LocalTime.now())) {
+                    System.out.println("Horário não pode ser no passado para hoje. Tente novamente.");
+                    horario = null;
+                }
+            } catch (DateTimeParseException e) {
+            System.out.println("Horário inválido! Tente novamente.");
+            }
+        }
+
+        Tarefa novaTarefa = new Tarefa(titulo, descricao, data, horario);
+        adicionarTarefa(novaTarefa);
+        System.out.println("Tarefa adicionada com sucesso.");
+
     }
 
     public void listarTarefas() {
@@ -94,14 +87,9 @@ public class GerenciaRotina {
             }
 
             listarTarefas();
-            System.out.println("Digite '<' para cancelar.");
 
             System.out.print("Informe o número da tarefa a concluir: ");
             String entrada = scanner.nextLine();
-
-            if (entrada.equalsIgnoreCase("<")) {
-                throw new CancelarOperacaoException();
-            }
 
             int indice = Integer.parseInt(entrada) - 1;
 
@@ -113,8 +101,6 @@ public class GerenciaRotina {
             System.out.println("Índice inválido.");
             }
 
-        } catch (CancelarOperacaoException e) {
-            System.out.println(e.getMessage());
         } catch (NumberFormatException e) {
             System.out.println("Entrada inválida. Por favor, digite um número válido.");
         }

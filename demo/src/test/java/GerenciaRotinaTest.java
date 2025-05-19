@@ -1,6 +1,5 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -178,63 +177,6 @@ public class GerenciaRotinaTest {
 
         assertEquals(1, gerenciaRotina.getTarefas().size());
         assertEquals("Teste hora", gerenciaRotina.getTarefas().get(0).getTitulo());
-    }
-
-    @Test
-    public void testCancelarNoTitulo() {
-        String inputSimulado = "<\n";
-        System.setIn(new ByteArrayInputStream(inputSimulado.getBytes()));
-        Scanner scanner = new Scanner(System.in);
-
-        gerenciaRotina.construirTarefa(scanner);
-
-        assertEquals(0, gerenciaRotina.getTarefas().size());
-    }
-
-    @Test
-    public void testCancelarNaDescricao() {
-        String inputSimulado = "Teste Tarefa\n<\n";
-        System.setIn(new ByteArrayInputStream(inputSimulado.getBytes()));
-        Scanner scanner = new Scanner(System.in);
-
-        gerenciaRotina.construirTarefa(scanner);
-
-        assertEquals(0, gerenciaRotina.getTarefas().size());
-    }
-
-    @Test
-    public void testCancelarNaData() {
-        String inputSimulado = "Teste Tarefa\nLembrar Tarefa\n<\n";
-        System.setIn(new ByteArrayInputStream(inputSimulado.getBytes()));
-        Scanner scanner = new Scanner(System.in);
-
-        gerenciaRotina.construirTarefa(scanner);
-
-        assertEquals(0, gerenciaRotina.getTarefas().size());
-    }
-
-    @Test
-    public void testCancelarNoHorario() {
-        String inputSimulado = "Teste Tarefa\nLembrar Tarefa\n20/12/2025\n<\n";
-        System.setIn(new ByteArrayInputStream(inputSimulado.getBytes()));
-        Scanner scanner = new Scanner(System.in);
-
-        gerenciaRotina.construirTarefa(scanner);
-
-        assertEquals(0, gerenciaRotina.getTarefas().size());
-    }
-
-    @Test
-    public void testCancelarConclusaoDeTarefa() {
-        Tarefa tarefa = new Tarefa("Revisar", "História", LocalDate.now().plusDays(1), LocalTime.of(9, 0));
-        gerenciaRotina.adicionarTarefa(tarefa);
-
-        String input = "<\n";    
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-
-        gerenciaRotina.concluirTarefa(scanner);
-
-        assertFalse(gerenciaRotina.getTarefas().get(0).isConcluida());
     }
 
     @Test
