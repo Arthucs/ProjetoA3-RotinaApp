@@ -9,29 +9,41 @@ public class RotinaInterfaceG extends JFrame {
 
     public RotinaInterfaceG(GerenciaRotina gerencia) {
         this.gerencia = gerencia;
-        setTitle("Rotina Diária - Menu Principal");
-        setSize(400, 250);
+        setTitle("Menu Principal");
+        setSize(450, 350);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(4, 1, 10, 10));
+        setLayout(new BorderLayout(10, 10));
 
-        JButton btnAdicionar = new JButton("Adicionar Tarefa");
-        btnAdicionar.addActionListener(e -> construirTarefa());
+        JLabel titulo = new JLabel("OrganizApp", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 20));
+        add(titulo, BorderLayout.NORTH);
 
-        JButton btnListar = new JButton("Listar Tarefas");
-        btnListar.addActionListener(e -> listarTarefas());
+        JPanel painelBotoes = new JPanel();
+        painelBotoes.setLayout(new GridLayout(4, 1, 10, 10));
+        painelBotoes.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50)); 
 
-        JButton btnConcluir = new JButton("Concluir Tarefa");
-        btnConcluir.addActionListener(e -> concluirTarefa());
+        JButton btnAdicionar = criarBotao("Adicionar Tarefa", e -> construirTarefa());
+        JButton btnListar = criarBotao("Listar Tarefas", e -> listarTarefas());
+        JButton btnConcluir = criarBotao("Concluir Tarefa", e -> concluirTarefa());
+        JButton btnSair = criarBotao("Sair", e -> System.exit(0));
 
-        JButton btnSair = new JButton("Sair");
-        btnSair.addActionListener(e -> System.exit(0));
+        painelBotoes.add(btnAdicionar);
+        painelBotoes.add(btnListar);
+        painelBotoes.add(btnConcluir);
+        painelBotoes.add(btnSair);
 
-        add(btnAdicionar);
-        add(btnListar);
-        add(btnConcluir);
-        add(btnSair);
+        add(painelBotoes, BorderLayout.CENTER);
     }
+
+    private JButton criarBotao(String texto, java.awt.event.ActionListener acao) {
+        JButton botao = new JButton(texto);
+        botao.setPreferredSize(new Dimension(200, 30));
+        botao.setFont(new Font("Arial", Font.PLAIN, 14));
+        botao.addActionListener(acao);
+        return botao;
+    }
+
 
     private void construirTarefa() {
         JTextField titulo = new JTextField();

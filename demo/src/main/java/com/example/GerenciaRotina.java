@@ -79,8 +79,6 @@ public class GerenciaRotina {
     public void concluirTarefa(Scanner scanner, Component parentComponent) {
         try {
 
-            listarTarefas();
-
             String entrada = lerEntrada(scanner);
 
             int indice = Integer.parseInt(entrada) - 1;
