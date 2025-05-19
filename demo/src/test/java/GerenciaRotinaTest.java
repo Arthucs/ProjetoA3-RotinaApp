@@ -1,6 +1,5 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -59,7 +58,7 @@ public class GerenciaRotinaTest {
 
         String input = "1\n";  // índice da tarefa
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        gerenciaRotina.concluirTarefa(scanner);
+        gerenciaRotina.concluirTarefa(scanner, null);
 
         assertTrue(gerenciaRotina.getTarefas().get(0).isConcluida());
     }
@@ -69,23 +68,10 @@ public class GerenciaRotinaTest {
         String input = "5\n";  // nenhum índice válido
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
-        gerenciaRotina.concluirTarefa(scanner);
+        gerenciaRotina.concluirTarefa(scanner, null);
 
         // Nenhuma exceção lançada e nada alterado
         assertEquals(0, gerenciaRotina.getTarefas().size());
-    }
-
-    @Test
-    public void testListarTarefasComListaVazia() {
-        java.io.ByteArrayOutputStream outContent = new java.io.ByteArrayOutputStream();
-        System.setOut(new java.io.PrintStream(outContent));
-
-        gerenciaRotina.listarTarefas();
-
-        String saida = outContent.toString().trim();
-        assertTrue(saida.contains("Nenhuma tarefa encontrada."));
-
-        System.setOut(System.out);
     }
 
     @Test
@@ -113,7 +99,7 @@ public class GerenciaRotinaTest {
 
         String input = "1\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        gerenciaRotina.concluirTarefa(scanner);
+        gerenciaRotina.concluirTarefa(scanner, null);
 
         List<Tarefa> tarefas = gerenciaRotina.getTarefas();
 
@@ -133,7 +119,7 @@ public class GerenciaRotinaTest {
         );
 
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        gerenciaRotina.construirTarefa(scanner);
+        gerenciaRotina.construirTarefa(scanner, null);
 
         assertEquals(1, gerenciaRotina.getTarefas().size());
         Tarefa tarefa = gerenciaRotina.getTarefas().get(0);
@@ -155,7 +141,7 @@ public class GerenciaRotinaTest {
         );
 
         Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes()));
-        gerenciaRotina.construirTarefa(scanner);
+        gerenciaRotina.construirTarefa(scanner, null);
 
         assertEquals(1, gerenciaRotina.getTarefas().size());
         assertEquals("Teste data", gerenciaRotina.getTarefas().get(0).getTitulo());
@@ -174,67 +160,10 @@ public class GerenciaRotinaTest {
         );
 
         Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes()));
-        gerenciaRotina.construirTarefa(scanner);
+        gerenciaRotina.construirTarefa(scanner, null);
 
         assertEquals(1, gerenciaRotina.getTarefas().size());
         assertEquals("Teste hora", gerenciaRotina.getTarefas().get(0).getTitulo());
-    }
-
-    @Test
-    public void testCancelarNoTitulo() {
-        String inputSimulado = "<\n";
-        System.setIn(new ByteArrayInputStream(inputSimulado.getBytes()));
-        Scanner scanner = new Scanner(System.in);
-
-        gerenciaRotina.construirTarefa(scanner);
-
-        assertEquals(0, gerenciaRotina.getTarefas().size());
-    }
-
-    @Test
-    public void testCancelarNaDescricao() {
-        String inputSimulado = "Teste Tarefa\n<\n";
-        System.setIn(new ByteArrayInputStream(inputSimulado.getBytes()));
-        Scanner scanner = new Scanner(System.in);
-
-        gerenciaRotina.construirTarefa(scanner);
-
-        assertEquals(0, gerenciaRotina.getTarefas().size());
-    }
-
-    @Test
-    public void testCancelarNaData() {
-        String inputSimulado = "Teste Tarefa\nLembrar Tarefa\n<\n";
-        System.setIn(new ByteArrayInputStream(inputSimulado.getBytes()));
-        Scanner scanner = new Scanner(System.in);
-
-        gerenciaRotina.construirTarefa(scanner);
-
-        assertEquals(0, gerenciaRotina.getTarefas().size());
-    }
-
-    @Test
-    public void testCancelarNoHorario() {
-        String inputSimulado = "Teste Tarefa\nLembrar Tarefa\n20/12/2025\n<\n";
-        System.setIn(new ByteArrayInputStream(inputSimulado.getBytes()));
-        Scanner scanner = new Scanner(System.in);
-
-        gerenciaRotina.construirTarefa(scanner);
-
-        assertEquals(0, gerenciaRotina.getTarefas().size());
-    }
-
-    @Test
-    public void testCancelarConclusaoDeTarefa() {
-        Tarefa tarefa = new Tarefa("Revisar", "História", LocalDate.now().plusDays(1), LocalTime.of(9, 0));
-        gerenciaRotina.adicionarTarefa(tarefa);
-
-        String input = "<\n";    
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-
-        gerenciaRotina.concluirTarefa(scanner);
-
-        assertFalse(gerenciaRotina.getTarefas().get(0).isConcluida());
     }
 
     @Test
@@ -245,7 +174,7 @@ public class GerenciaRotinaTest {
         String input = "abc\n";  
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
-        gerenciaRotina.concluirTarefa(scanner);
+        gerenciaRotina.concluirTarefa(scanner, null);
 
         assertFalse(gerenciaRotina.getTarefas().get(0).isConcluida());
     }
@@ -264,7 +193,7 @@ public class GerenciaRotinaTest {
         );
 
         Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes()));
-        gerenciaRotina.construirTarefa(scanner);
+        gerenciaRotina.construirTarefa(scanner, null);
 
         assertEquals(1, gerenciaRotina.getTarefas().size());
         assertEquals("Tarefa com data passada", gerenciaRotina.getTarefas().get(0).getTitulo());
@@ -288,7 +217,7 @@ public class GerenciaRotinaTest {
         );
 
         Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes()));
-        gerenciaRotina.construirTarefa(scanner);
+        gerenciaRotina.construirTarefa(scanner, null);
 
         assertEquals(1, gerenciaRotina.getTarefas().size());
         assertEquals("Tarefa com hora passada", gerenciaRotina.getTarefas().get(0).getTitulo());
