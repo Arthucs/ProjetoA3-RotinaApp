@@ -1,6 +1,7 @@
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import com.example.GerenciaRotina;
@@ -11,6 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
@@ -19,6 +22,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.*;
 
@@ -35,10 +41,20 @@ public class RotinaInterfaceGTest {
         interfaceG.setVisible(false);
     }
 
+    private JButton getBotaoPorTexto(String texto) {
+        JPanel painelBotoes = (JPanel) ((JPanel) interfaceG.getContentPane().getComponent(1)); // BorderLayout.CENTER
+        for (Component c : painelBotoes.getComponents()) {
+            if (c instanceof JButton botao && botao.getText().equals(texto)) {
+                return botao;
+            }
+        }
+        throw new RuntimeException("Botão com texto \"" + texto + "\" não encontrado.");
+    }
+
     @Test
     public void testChamarConstruirTarefaQuandoClicarAdicionar() {
-        JButton btn = (JButton) interfaceG.getContentPane().getComponent(0);
-        btn.doClick();
+        JButton btnAdicionar = getBotaoPorTexto("Adicionar Tarefa");
+        btnAdicionar.doClick();
         verify(mockGerencia, atLeast(0)).construirTarefa(any(), any());
     }
 
@@ -46,8 +62,8 @@ public class RotinaInterfaceGTest {
     public void testChamarListarTarefasQuandoClicarListar() {
         when(mockGerencia.getTarefas()).thenReturn(Collections.emptyList());
 
-        JButton btn = (JButton) interfaceG.getContentPane().getComponent(1);
-        btn.doClick();
+        JButton btnListar = getBotaoPorTexto("Listar Tarefas");
+        btnListar.doClick();
 
         verify(mockGerencia).getTarefas();
     }
@@ -58,8 +74,8 @@ public class RotinaInterfaceGTest {
                 new Tarefa("Teste", "Desc", java.time.LocalDate.now(), java.time.LocalTime.now())
         ));
 
-        JButton btn = (JButton) interfaceG.getContentPane().getComponent(2);
-        btn.doClick();
+        JButton btnConcluir = getBotaoPorTexto("Concluir Tarefa");
+        btnConcluir.doClick();
 
         verify(mockGerencia).concluirTarefa(any(), any());
     }
@@ -158,6 +174,60 @@ public class RotinaInterfaceGTest {
         } catch (Exception e) {
             fail("Erro ao acessar método criarBotao: " + e.getMessage());
             return null;
+        }
+    }
+
+    @Test
+    public void testNaoFazNadaSeListaVazia() {
+        when(mockGerencia.getTarefas()).thenReturn(Collections.emptyList());
+
+        interfaceG.excluirTarefa();
+
+        verify(mockGerencia, never()).excluirTarefa(any(), any());
+    }
+
+    @Test
+    public void testExcluirTarefaEspecifica() {
+        Tarefa tarefa = new Tarefa("Teste", "Descrição", LocalDate.now(), LocalTime.now());
+        when(mockGerencia.getTarefas()).thenReturn(Arrays.asList(tarefa));
+
+        try (MockedStatic<JOptionPane> mocked = mockStatic(JOptionPane.class)) {
+            mocked.when(() -> JOptionPane.showInputDialog(any(Component.class), contains("Digite o número")))
+                    .thenReturn("1");
+
+            interfaceG.excluirTarefa();
+
+            verify(mockGerencia).excluirTarefa(any(), eq(interfaceG));
+        }
+    }
+
+    @Test
+    public void testLimparTarefas() {
+        Tarefa tarefa = new Tarefa("Teste", "Descrição", LocalDate.now(), LocalTime.now());
+        when(mockGerencia.getTarefas()).thenReturn(Arrays.asList(tarefa));
+
+        try (MockedStatic<JOptionPane> mocked = mockStatic(JOptionPane.class)) {
+            mocked.when(() -> JOptionPane.showInputDialog(any(Component.class), contains("Digite o número")))
+                    .thenReturn("Limpar");
+
+            interfaceG.excluirTarefa();
+
+            verify(mockGerencia).excluirTarefa(any(), eq(interfaceG));
+        }
+    }
+
+    @Test
+    public void testCancelarEntradaNaoChamaExclusao() {
+        Tarefa tarefa = new Tarefa("Teste", "Descrição", LocalDate.now(), LocalTime.now());
+        when(mockGerencia.getTarefas()).thenReturn(Arrays.asList(tarefa));
+
+        try (MockedStatic<JOptionPane> mocked = mockStatic(JOptionPane.class)) {
+            mocked.when(() -> JOptionPane.showInputDialog(any(Component.class), anyString()))
+                    .thenReturn(null);
+
+            interfaceG.excluirTarefa();
+
+            verify(mockGerencia, never()).excluirTarefa(any(), any());
         }
     }
 }

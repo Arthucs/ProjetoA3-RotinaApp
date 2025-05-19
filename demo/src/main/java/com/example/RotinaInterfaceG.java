@@ -20,17 +20,19 @@ public class RotinaInterfaceG extends JFrame {
         add(titulo, BorderLayout.NORTH);
 
         JPanel painelBotoes = new JPanel();
-        painelBotoes.setLayout(new GridLayout(4, 1, 10, 10));
+        painelBotoes.setLayout(new GridLayout(5, 1, 10, 10));
         painelBotoes.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50)); 
 
         JButton btnAdicionar = criarBotao("Adicionar Tarefa", e -> construirTarefa());
         JButton btnListar = criarBotao("Listar Tarefas", e -> listarTarefas());
         JButton btnConcluir = criarBotao("Concluir Tarefa", e -> concluirTarefa());
         JButton btnSair = criarBotao("Sair", e -> System.exit(0));
-
+        JButton btnExcluir = criarBotao("Excluir Tarefa", e -> excluirTarefa());
+        
         painelBotoes.add(btnAdicionar);
         painelBotoes.add(btnListar);
         painelBotoes.add(btnConcluir);
+        painelBotoes.add(btnExcluir);
         painelBotoes.add(btnSair);
 
         add(painelBotoes, BorderLayout.CENTER);
@@ -73,6 +75,28 @@ public class RotinaInterfaceG extends JFrame {
         }
     }
 
+    public void excluirTarefa() {
+        if (gerencia.getTarefas().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nenhuma tarefa disponível.");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < gerencia.getTarefas().size(); i++) {
+            sb.append(i + 1).append(". ").append(gerencia.getTarefas().get(i)).append("\n");
+        }
+
+        sb.append("\nDigite o número da tarefa a excluir ou 'Limpar' para apagar todas.");
+
+        String escolha = JOptionPane.showInputDialog(this, sb.toString());
+
+        if (escolha == null) return;
+
+        Scanner scanner = new Scanner(escolha);
+        gerencia.excluirTarefa(scanner, this);
+    }
+
+
     public void listarTarefas() {
         StringBuilder sb = new StringBuilder();
         int i = 1;
@@ -97,7 +121,7 @@ public class RotinaInterfaceG extends JFrame {
             sb.append(i + 1).append(". ").append(gerencia.getTarefas().get(i)).append("\n");
         }
 
-        String escolha = JOptionPane.showInputDialog(this, sb + "\nDigite o número da tarefa a concluir:");
+        String escolha = JOptionPane.showInputDialog(this, sb + "\nDigite o número da tarefa que deseja concluir ou desmarcar:");
 
         if (escolha == null) return;
 

@@ -16,7 +16,7 @@ public class TarefaTest {
     @Before
     public void setUp() {
         tarefa = new Tarefa("Estudar", "Revisar conteúdo de Java", 
-                                    LocalDate.now(), 
+                                    LocalDate.of(2025, 5, 16), 
                                     LocalTime.of(14, 0));
     }
 

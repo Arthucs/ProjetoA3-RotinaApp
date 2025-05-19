@@ -78,21 +78,71 @@ public class GerenciaRotina {
 
     public void concluirTarefa(Scanner scanner, Component parentComponent) {
         try {
-
             String entrada = lerEntrada(scanner);
-
             int indice = Integer.parseInt(entrada) - 1;
 
             if (indice >= 0 && indice < tarefas.size()) {
-                tarefas.get(indice).marcarComoConcluida();
+                Tarefa tarefa = tarefas.get(indice);
+
+                if (tarefa.isConcluida()) {
+                    tarefa.desmarcarComoConcluida();
+                    JOptionPane.showMessageDialog(parentComponent,
+                            "Tarefa desmarcada com sucesso!",
+                            "Tarefa desmarcada!",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    tarefa.marcarComoConcluida();
+                    JOptionPane.showMessageDialog(parentComponent,
+                            "Tarefa concluída com sucesso!",
+                            "Tarefa concluída!",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
                 salvarTarefas();
-                JOptionPane.showMessageDialog(parentComponent, "Tarefa concluída com sucesso!", "Tarefa concluída!", JOptionPane.INFORMATION_MESSAGE);
+
             } else {
                 JOptionPane.showMessageDialog(parentComponent, "Índice inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (NumberFormatException e) {
              JOptionPane.showMessageDialog(parentComponent, "Entrada inválida. Por favor, digite um número válido.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void excluirTarefa(Scanner scanner, Component parentComponent) {
+        String entrada = lerEntrada(scanner).trim();
+
+        if (entrada.equalsIgnoreCase("Limpar")) {
+            int confirmacao = JOptionPane.showConfirmDialog(parentComponent,
+                    "Tem certeza que deseja excluir todas as tarefas?",
+                    "Confirmar Limpeza",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (confirmacao == JOptionPane.YES_OPTION) {
+                tarefas.clear();
+                salvarTarefas();
+                JOptionPane.showMessageDialog(parentComponent, "Todas as tarefas foram removidas.", "Limpeza concluída", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } else {
+            try {
+                int indice = Integer.parseInt(entrada) - 1;
+
+                if (indice >= 0 && indice < tarefas.size()) {
+                    Tarefa removida = tarefas.remove(indice);
+                    salvarTarefas();
+                    JOptionPane.showMessageDialog(parentComponent,
+                            "Tarefa \"" + removida.getTitulo() + "\" excluída com sucesso!",
+                            "Tarefa excluída", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(parentComponent,
+                            "Índice inválido. Nenhuma tarefa foi excluída.",
+                            "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(parentComponent,
+                        "Entrada inválida. Digite o número da tarefa ou \"Limpar\" para remover todas.",
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
