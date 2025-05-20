@@ -1,5 +1,7 @@
 import org.junit.Test;
+import org.junit.Before;
 
+import com.example.Autenticador;
 import com.example.TelaLogin;
 
 import javax.swing.*;
@@ -8,11 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class TelaLoginTest {
+    private Autenticador mockAutenticador;
+    private TelaLogin tela;
+    
+    @Before
+    public void setUp() {
+        mockAutenticador = mock(Autenticador.class);
+        tela = spy(new TelaLogin());
+    }
+
     @Test
     public void testContemComponentesEssenciais() {
-        TelaLogin tela = new TelaLogin();
 
         assertEquals("Login", tela.getTitle());
 
@@ -39,7 +50,6 @@ public class TelaLoginTest {
 
     @Test
     public void testTerCampoUsuario() {
-        TelaLogin tela = new TelaLogin();
         List<Component> camposTexto = encontrarComponentes(JTextField.class, tela.getContentPane());
 
         assertFalse("Campo de usuário não encontrado.", camposTexto.isEmpty());
@@ -47,9 +57,17 @@ public class TelaLoginTest {
 
     @Test
     public void testTerCampoSenha() {
-        TelaLogin tela = new TelaLogin();
         List<Component> camposSenha = encontrarComponentes(JPasswordField.class, tela.getContentPane());
 
         assertFalse("Campo de senha não encontrado.", camposSenha.isEmpty());
+    }
+
+    @Test
+    public void testAbrirMenuPrincipalComAutenticacaoValida() {
+        when(mockAutenticador.autenticar("user", "abcd")).thenReturn(true);
+
+        tela.autenticarEEntrar("user", "abcd");
+
+        verify(tela).dispose();
     }
 }

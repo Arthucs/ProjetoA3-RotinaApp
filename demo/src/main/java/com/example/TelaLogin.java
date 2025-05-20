@@ -39,17 +39,21 @@ public class TelaLogin extends JFrame {
             String usuario = campoUsuario.getText();
             String senha = new String(campoSenha.getPassword());
 
-            if (autenticador.autenticar(usuario, senha)) {
-                dispose();
-                GerenciaRotina gerencia = new GerenciaRotina("rotina_" + usuario + ".txt");
-                new RotinaInterfaceG(gerencia).setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(this, "Usuário ou senha inválidos.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
+            autenticarEEntrar(usuario, senha);
         });
 
         JPanel painelBotao = new JPanel();
         painelBotao.add(botaoEntrar);
         add(painelBotao, BorderLayout.SOUTH);
+    }
+
+    public void autenticarEEntrar(String usuario, String senha) {
+        if (autenticador.autenticar(usuario, senha)) {
+            dispose();
+            GerenciaRotina gerencia = new GerenciaRotina("rotina_" + usuario + ".txt");
+            new RotinaInterfaceG(gerencia).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Usuário ou senha inválidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
