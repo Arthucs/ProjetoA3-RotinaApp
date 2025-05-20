@@ -2,7 +2,10 @@ package com.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Scanner;
+import java.util.List;
 
 public class RotinaInterfaceG extends JFrame {
     private final GerenciaRotina gerencia;
@@ -36,6 +39,8 @@ public class RotinaInterfaceG extends JFrame {
         painelBotoes.add(btnSair);
 
         add(painelBotoes, BorderLayout.CENTER);
+
+        iniciarMonitoramentoTarefas();
     }
 
     private JButton criarBotao(String texto, java.awt.event.ActionListener acao) {
@@ -127,6 +132,32 @@ public class RotinaInterfaceG extends JFrame {
 
         Scanner scanner = new Scanner(escolha);
         gerencia.concluirTarefa(scanner, null);
+    }
+
+    private void iniciarMonitoramentoTarefas() {
+        Timer timer = new Timer(60000, e -> {
+            List<Tarefa> tarefas = gerencia.getTarefas();
+            verificarNotificacoes(tarefas, LocalDate.now(), LocalTime.now());
+            });
+            timer.setRepeats(true);
+            timer.start();
+    }
+
+    public void verificarNotificacoes(List<Tarefa> tarefas, LocalDate hoje, LocalTime agora) {
+        for (Tarefa tarefa : tarefas) {
+            if (!tarefa.isConcluida()
+                    && !tarefa.foiNotificada()
+                    && tarefa.getData().isEqual(hoje)
+                    && !tarefa.getHorario().isAfter(agora)) {
+
+                JOptionPane.showMessageDialog(this,
+                        "Chegou a hora da tarefa: \n" + tarefa.getTitulo() + " - " + agora,
+                        "Lembrete de Tarefa",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                tarefa.setNotificada(true);
+            }
+        }
     }
 
 }
