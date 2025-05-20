@@ -20,7 +20,7 @@ public class TelaLogin extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
-        JLabel labelTitulo = new JLabel("Acesso à Rotina", SwingConstants.CENTER);
+        JLabel labelTitulo = new JLabel("Acesso ao OrganizApp", SwingConstants.CENTER);
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 18));
         add(labelTitulo, BorderLayout.NORTH);
 
