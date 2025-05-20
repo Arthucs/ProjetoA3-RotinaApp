@@ -10,6 +10,7 @@ public class Tarefa implements Serializable {
     private LocalDate data;
     private LocalTime horario;
     private boolean concluida;
+    private boolean notificada;
 
     public Tarefa(String titulo, String descricao, LocalDate data, LocalTime horario) {
         this.titulo = titulo;
@@ -17,6 +18,7 @@ public class Tarefa implements Serializable {
         this.data = data;
         this.horario = horario;
         this.concluida = false;
+        this.notificada = false;
     }
 
     public void marcarComoConcluida() {
@@ -29,6 +31,14 @@ public class Tarefa implements Serializable {
 
     public boolean isConcluida() {
         return concluida;
+    }
+
+    public boolean foiNotificada() {
+        return notificada;
+    }
+
+    public void setNotificada(boolean notificada) {
+        this.notificada = notificada;
     }
 
         public String getTitulo() {
