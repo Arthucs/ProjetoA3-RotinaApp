@@ -1,10 +1,10 @@
 name: CI - Testes Automáticos
 
 on:
+  push:
+    branches: [ "main", "develop" ]
   pull_request:
-    branches:
-      - develop
-      - main
+    branches: [ "main", "develop" ]
 
 jobs:
   build:
@@ -14,15 +14,11 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: Instalar JDK
+      - name: Instalar Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
           java-version: '17'
+          distribution: 'temurin'
 
       - name: Compilar o projeto
-        run: javac -d out $(find . -name "*.java")
-
-      - name: Rodar testes
-        run: |
-          java -cp out org.junit.platform.console.ConsoleLauncher --scan-classpath
+        run: mvn clean install

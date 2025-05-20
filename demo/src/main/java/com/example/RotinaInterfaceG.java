@@ -101,7 +101,6 @@ public class RotinaInterfaceG extends JFrame {
         gerencia.excluirTarefa(scanner, this);
     }
 
-
     public void listarTarefas() {
         StringBuilder sb = new StringBuilder();
         int i = 1;

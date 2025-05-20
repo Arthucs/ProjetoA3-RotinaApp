@@ -19,14 +19,8 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.contains;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 public class RotinaInterfaceGTest {
@@ -105,7 +99,6 @@ public class RotinaInterfaceGTest {
         when(tarefa.toString()).thenReturn("Tarefa 1");
         when(mockGerencia.getTarefas()).thenReturn(Collections.singletonList(tarefa));
 
-        JOptionPane pane = mock(JOptionPane.class);
         try (var mocked = Mockito.mockStatic(JOptionPane.class)) {
             mocked.when(() -> JOptionPane.showInputDialog(any(), any())).thenReturn(null);
             interfaceG.concluirTarefa();
@@ -239,7 +232,6 @@ public class RotinaInterfaceGTest {
 
         var frame = new RotinaInterfaceG(mockGerencia); 
 
-        JOptionPane pane = mock(JOptionPane.class);
         JOptionPane.setRootFrame(new JFrame());
 
         frame.verificarNotificacoes(tarefas,
