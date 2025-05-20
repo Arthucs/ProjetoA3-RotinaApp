@@ -151,7 +151,7 @@ public class RotinaInterfaceG extends JFrame {
                     && !tarefa.getHorario().isAfter(agora)) {
 
                 JOptionPane.showMessageDialog(this,
-                        "Chegou a hora da tarefa: " + tarefa.getTitulo() + " - " + agora,
+                        "Chegou a hora da tarefa: \n" + tarefa.getTitulo() + " - " + agora,
                         "Lembrete de Tarefa",
                         JOptionPane.INFORMATION_MESSAGE);
 

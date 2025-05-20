@@ -17,6 +17,7 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -229,5 +230,22 @@ public class RotinaInterfaceGTest {
 
             verify(mockGerencia, never()).excluirTarefa(any(), any());
         }
+    }
+
+    @Test
+    public void testNotificarTarefaNoHorario() {
+        Tarefa tarefa = new Tarefa("Festa", "Aniversário", LocalDate.of(2025, 5, 15), LocalTime.of(14, 0));
+        List<Tarefa> tarefas = List.of(tarefa);
+
+        var frame = new RotinaInterfaceG(mockGerencia); 
+
+        JOptionPane pane = mock(JOptionPane.class);
+        JOptionPane.setRootFrame(new JFrame());
+
+        frame.verificarNotificacoes(tarefas,
+                LocalDate.of(2025, 5, 15),
+                LocalTime.of(14, 0));
+
+        assertTrue(tarefa.foiNotificada());
     }
 }
