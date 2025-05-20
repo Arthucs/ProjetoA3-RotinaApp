@@ -41,7 +41,7 @@ public class Tarefa implements Serializable {
         this.notificada = notificada;
     }
 
-        public String getTitulo() {
+    public String getTitulo() {
         return titulo;
     }
 

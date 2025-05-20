@@ -70,12 +70,6 @@ public class GerenciaRotina {
 
     }
 
-    public void listarTarefas() {
-        for (int i = 0; i < tarefas.size(); i++) {
-            System.out.println(i + 1 + ". " + tarefas.get(i));
-        }
-    }
-
     public void concluirTarefa(Scanner scanner, Component parentComponent) {
         try {
             String entrada = lerEntrada(scanner);
