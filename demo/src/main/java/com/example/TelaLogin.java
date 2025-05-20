@@ -6,7 +6,14 @@ import java.awt.event.ActionEvent;
 
 public class TelaLogin extends JFrame {
 
+    private final Autenticador autenticador;
+
     public TelaLogin() {
+        this.autenticador = new Autenticador();
+        configurarInterface();
+    }
+
+    private void configurarInterface() {
         setTitle("Login");
         setSize(300, 180);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -32,12 +39,10 @@ public class TelaLogin extends JFrame {
             String usuario = campoUsuario.getText();
             String senha = new String(campoSenha.getPassword());
 
-            if (usuario.equals("admin") && senha.equals("1234")) {
+            if (autenticador.autenticar(usuario, senha)) {
                 dispose();
-                
-                GerenciaRotina gerencia = new GerenciaRotina("rotina.txt");
+                GerenciaRotina gerencia = new GerenciaRotina("rotina_" + usuario + ".txt");
                 new RotinaInterfaceG(gerencia).setVisible(true);
-                
             } else {
                 JOptionPane.showMessageDialog(this, "Usuário ou senha inválidos.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
