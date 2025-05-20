@@ -23,6 +23,10 @@ public class Tarefa implements Serializable {
         this.concluida = true;
     }
 
+    public void desmarcarComoConcluida() {
+        this.concluida = false;
+    }
+
     public boolean isConcluida() {
         return concluida;
     }
