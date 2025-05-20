@@ -14,27 +14,27 @@ public class AutenticadorTest {
     }
 
     @Test
-    public void deveAutenticarUsuarioAdminComSenhaCorreta() {
+    public void testAutenticarUsuarioAdmin() {
         assertTrue(autenticador.autenticar("admin", "1234"));
     }
 
     @Test
-    public void deveAutenticarUsuarioUserComSenhaCorreta() {
+    public void testAutenticarUsuarioUser() {
         assertTrue(autenticador.autenticar("user", "abcd"));
     }
 
     @Test
-    public void naoDeveAutenticarComUsuarioInvalido() {
+    public void testNaoAutenticarComUsuarioInvalido() {
         assertFalse(autenticador.autenticar("invalido", "1234"));
     }
 
     @Test
-    public void naoDeveAutenticarComSenhaIncorreta() {
+    public void testNaoAutenticarComSenhaIncorreta() {
         assertFalse(autenticador.autenticar("admin", "errada"));
     }
 
     @Test
-    public void naoDeveAutenticarComUsuarioEsenhaInvalidos() {
+    public void testNaoAutenticarComUsuarioEsenhaInvalidos() {
         assertFalse(autenticador.autenticar("desconhecido", "senha"));
     }
 }
