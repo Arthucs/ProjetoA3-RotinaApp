@@ -17,4 +17,10 @@ A Tela de Login vai direcioná-lo para o **Menu Principal**, que possui as segui
 2. *Listar Tarefas:* Exibe todas as tarefas adicionadas em ordem e seu status (se foram concluídas ou não), através de dois colchetes [ ] (tarefas concluídas possuem um [ X ] entre os colchetes).
 3. *Concluir Tarefa:* Exibe novamente a lista de tarefas e permite que o usuário digite o número correspondente da tarefa que deseja concluir (marcar com um X). Caso a tarefa escolhida já esteja marcada, ela é desmarcada, voltando ao normal.
 4. *Excluir Tarefa:* Semelhante a *Concluir Tarefa*, porém, a tarefa correspondente ao número inserido é excluída. Digitar "Limpar" ao invés de um número faz todas as tarefas serem excluídas da lista.
-5. *Sair:* Encerra a aplicação.  
+5. *Sair:* Encerra a aplicação.
+
+## Membros do Grupo
+- Ana Luiza Inácia — RA: 323116414
+- Arthur Moreira de Carvalho — RA: 323126778
+- Leandro Henrique — RA: 323132411
+- Lorena Malta — RA: 323131530
